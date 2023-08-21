@@ -1,0 +1,968 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <string.h>
+#include <conio.h>
+#include <vector>
+using namespace std;
+
+	class Post
+	{
+		private:
+			string post_text;
+			string post_by;
+			int num_likes;
+			int num_comments;
+			vector <string> post_comments;
+			
+		public:
+			// constructor
+			Post () {}
+			
+			Post (string post_text, string post_by)
+			{
+				this->post_text = post_text;
+				this->post_by = post_by;
+				num_likes = 0;
+				num_comments = 0;
+			}
+			
+			
+			// ----------------------------------------------------------getters
+			string getPostText ()
+			{	return post_text; }
+			
+			string getPostBy ()
+			{	return post_by; }
+			
+			int getNumLikes ()
+			{	return num_likes; }
+			
+			int getNumComments ()
+			{	return num_comments; }
+			// ----------------------------------------------------------end of getters
+			
+			
+			// ----------------------------------------------------------functions
+			// ----------------------------------------------------------liking post
+			void addLikesToPost ()
+			{	++num_likes;	}
+			// ----------------------------------------------------------adding comment to post
+			void addCommentsToPost (string comment)
+			{
+				post_comments.push_back(comment);
+			}
+			
+			// ----------------------------------------------------------showing all comments on post
+			void showCommentsOnPost ()
+			{
+				bool ok = false;
+				vector <string>::iterator itr;
+				int i = 1;
+				
+			    for (itr = post_comments.begin(); itr != post_comments.end(); itr++)
+			    {
+			        ok = true;
+			        cout << i++ << ". " << *itr << endl;
+			    }
+			    if (!ok)
+			    {
+			        cout << "No comments on this posts yet " << endl;
+			    }
+			}
+			
+			// ----------------------------------------------------------displaying complete post info
+			void showPostInfo ()
+			{
+				cout << "-----Post Text-----" << endl << endl;
+				cout << post_text << endl << endl;
+				cout << "   Posted By : " << post_by << endl;
+				cout << "   Likes : " << num_likes << endl;
+				cout << "   Comments : " << num_comments << endl;
+				
+				if (num_comments != 0)
+				{
+					showCommentsOnPost();
+				}
+				cout << endl << endl;
+				
+			}
+			// ----------------------------------------------------------end of functions	
+	};
+
+	class Page
+	{
+		private:
+			string pageAdminName;
+			string pageAdminPassword;
+		
+		public:
+			string pageName;
+			string pageDescription;
+			int pageFollowers = 0;
+			
+			vector <Post> pagePosts;
+			
+			// constructor
+			Page () {}
+			
+			
+			// ----------------------------------------------------------setters
+			void setPageAdminName (string pageAdminName)
+			{	this->pageAdminName = pageAdminName; }
+			
+			void setPageAdminPassword (string pageAdminPassword)
+			{	this->pageAdminPassword = pageAdminPassword; }
+			// ----------------------------------------------------------end of setters
+			
+			
+			// ----------------------------------------------------------getters
+			string getPageAdminName ()
+			{	return pageAdminName; }
+			
+			string getPageAdminPassword ()
+			{	return pageAdminPassword; }
+			
+			string getPageName ()
+			{	return pageName; }
+			
+			string getPageDescription ()
+			{	return pageDescription; }
+			
+			int getPageFollowers ()
+			{	return pageFollowers; }
+			// ----------------------------------------------------------end of getters
+			
+			// functions
+			void showPageInfo ();
+			void showPagePosts ();
+			void addFollower ();
+			void addPostToPage (Post&);
+			void deletePostFromPage ();
+	};
+	
+	
+	// ----------------------------------------------------------showing page info
+	void Page::showPageInfo()
+	{
+		cout << "   Page  Name  : " << pageName << endl;
+		cout << "   # Followers : " << pageFollowers << endl;
+		cout << "   Managed by : " << pageAdminName << endl << endl;
+		cout << "----Page Description----" << endl << pageDescription << endl << endl;
+	}
+	
+	// ----------------------------------------------------------showing page posts
+	void Page::showPagePosts()
+	{
+		bool ok = false;
+		vector <Post>::iterator itr;
+		int i = 1;
+		
+	    for (itr = pagePosts.begin(); itr != pagePosts.end(); itr++)
+	    {
+	        ok = true;
+	        Post temp = *itr;
+	        temp.showPostInfo();
+	    }
+	    
+	    if (!ok)
+	    {
+	        cout << "No posts on this page yet..." << endl;
+	    }
+	}
+	
+	// ----------------------------------------------------------add follower
+	void Page::addFollower()
+	{	++pageFollowers;	}
+	
+	// ----------------------------------------------------------adding post to page
+	void Page::addPostToPage(Post& post_obj)
+	{
+		pagePosts.push_back(post_obj);
+	}
+	
+	// ----------------------------------------------------------deleting post from page
+	void Page::deletePostFromPage()
+	{
+		bool ok = false;
+		vector <Post>::iterator itr;
+		int i = 1;
+		
+		if(ok)
+		{
+			for (itr = pagePosts.begin(); itr != pagePosts.end(); itr++)
+		    {
+		    	Post temp = *itr;
+		        cout << "---Post-" << i++ << "---" << endl;
+				temp.getPostText();
+				cout << endl << endl;
+		    }
+		    cout << "\n\nEnter number of post to delete : ";
+		    int x;
+		    cin >> x;
+		    itr = pagePosts.begin() + (x - 1);
+		    pagePosts.erase(itr);
+		}
+	    
+	    if (!ok)
+	    {
+	        cout << "No posts have been made on this page yet" << endl;
+	    }
+	}
+	
+	
+	class Message
+	{
+		private:
+			string msg_text;
+			string msg_sender;
+			string msg_receiver;
+		
+		public:
+			// constructor
+			Message () {}
+			
+			// ----------------------------------------------------------setters
+			void setMsgText (string msg_text)
+			{	this->msg_text = msg_text; }
+			
+			void setMsgSender (string msg_sender)
+			{	this->msg_sender = msg_sender; }
+			
+			void setMsgReceiver (string msg_receiver)
+			{	this->msg_receiver = msg_receiver; }
+			// ----------------------------------------------------------end of setters
+			
+			// ----------------------------------------------------------getters
+			string getMsgText ()
+			{	return msg_text; }
+			
+			string getMsgSender ()
+			{	return msg_sender; }
+			
+			string getMsgReceiver ()
+			{	return msg_receiver; }
+			// ----------------------------------------------------------end of getters		
+	};
+	
+
+
+	class BasicInfo
+	{
+		protected:
+			// basic information
+			int ID;
+			static int increment;
+			string name;
+			string email;
+			string password;
+			string DOB; // date of birth DD/MM/YYYY
+			int age;
+			string gender;
+			string user_type;
+			
+			// posts --- user and admin both can interact with posts
+			vector <Post> PostsHistory;
+		
+		public:
+			// constructor
+			BasicInfo () {}
+			
+			// functions
+			void createUser (string);
+			void getUserInfo ();
+			void updateUserInfo();
+			
+			// add/detlete/show functions for Post vector
+			void addPost ();
+			void deletePost ();
+			void showPosts ();
+			
+			// ----------------------------------------------------------setters
+			void setName (string name)
+			{	this->name = name; }
+			
+			void setPassword (string password)
+			{	this->password = password; }
+			
+			void setAge (int age)
+			{	this->age = age; }
+			
+			void setGender (string gender)
+			{	this->gender = gender; }
+			// ----------------------------------------------------------end of setters
+	
+	
+			// ----------------------------------------------------------getters
+			string getName ()
+			{	return name; }
+			
+			string getEmail ()
+			{	return email; }
+			
+			string getPassword ()
+			{	return password; }
+			
+			string getDOB ()
+			{	return DOB;	}
+			
+			int getAge ()
+			{	return age; }
+			
+			string getGender ()
+			{	return gender; }
+			
+			string getUserType ()
+			{	return user_type; }
+			// ----------------------------------------------------------end of getters
+	};
+	int BasicInfo::increment = 0;
+	
+	
+	// ----------------------------------------------------------creating new user
+	void BasicInfo::createUser (string user_type)
+	{
+		ID = ++increment;
+		
+		cout << "   Name : ";
+		cin >> name;
+		
+		cout << "   Email : ";
+		cin >> email;
+		
+		cout << "   Password : ";
+		cin >> password;
+		
+		cout << "   DOB (DD/MM/YYYY) : ";
+		cin >> DOB;
+		
+		cout << "   Age : ";
+		cin >> age;
+		
+		cout << "   Gender (Male/Female/X) : ";
+		cin >> gender;
+		
+		this->user_type = user_type;
+	}
+	
+	// ----------------------------------------------------------displaying user info
+	void BasicInfo::getUserInfo()
+	{
+		cout << "-----Displaying Details-----" << endl << endl;
+		
+		cout << "   User-ID   : " 			<< ID 			<< endl;
+		cout << "   Name      : "    		<< name 		<< endl;
+		cout << "   Email     : " 			<< email 		<< endl;
+		cout << "   DOB (DD/MM//YYYY) : " 	<< DOB 			<< endl;
+		cout << "   Age       : " 			<< age 			<< endl;
+		cout << "   Gender    : " 			<< gender 		<< endl;
+		cout << "   User-Type : " 			<< user_type 	<< endl << endl;
+	}
+	
+	// ----------------------------------------------------------updating user info
+	void BasicInfo::updateUserInfo()
+	{
+		char choice;
+		
+		do
+		{
+			system("cls");
+			cout << "-----Updating Details-----" 	<< endl << endl;
+			cout << "Choose details to update " 	<< endl << endl;
+			
+			cout << "A. Name " 			<< endl;
+			cout << "B. Password " 		<< endl;
+			cout << "C. Date of Birth " << endl;
+			cout << "D. Age " 			<< endl;
+			cout << "E. Gender " 		<< endl;
+			cout << "Z. Go back to main menu" 		<< endl << endl;
+			
+			cout << "Choice : ";
+			
+			choice = getche();
+		}
+		while (choice != 'A' && choice != 'a' && choice != 'B' && choice != 'b' && choice != 'C' && choice != 'c' && 
+			   choice != 'D' && choice != 'd' && choice != 'E' && choice != 'e' && choice != 'Z' && choice != 'z');
+		
+		// updating name
+		if (choice == 'A' || choice == 'a')
+		{
+			cout << "   Enter updated Name : ";
+			cin >> name;
+		}
+		
+		// updating password
+		else if (choice == 'B' || choice == 'b')
+		{
+			string temp;
+			cout << "Enter current password : ";
+			cin >> temp;
+			
+			if (temp == password)
+			{
+				cout << "   Enter new Password : ";
+				cin >> password;
+			}
+			
+			else
+			{
+				cout << "   Password does not match! " << endl;
+				cout << "Press any key to go back to main menu...";
+				getch();
+			}
+		}
+		
+		// updating date of birth
+		else if (choice == 'C' || choice == 'c')
+		{
+			cout << "   Enter updated DOB : ";
+			cin >> DOB;
+		}
+		
+		// updating age
+		else if (choice == 'D' || choice == 'd')
+		{
+			cout << "   Enter updated Age : ";
+			cin >> age;
+		}
+		
+		// updating gender
+		else if (choice == 'E' || choice == 'e')
+		{
+			cout << "   Enter updated Gender : ";
+			cin >> gender;
+		}
+		
+		cout << endl << "Data updated successfully! " << endl;
+		cout << "Press any key to go back to main menu...";
+		getch();
+	}
+	
+	// ----------------------------------------------------------showing all posts
+	void BasicInfo::showPosts()
+	{
+		bool ok = false;
+		vector <Post>::iterator itr;
+		int i = 1;
+		
+	    for (itr = PostsHistory.begin(); itr != PostsHistory.end(); itr++)
+	    {
+	        ok = true;
+	        Post temp = *itr;
+	        temp.showPostInfo();
+	        
+	        char choice;
+	        cout << endl << "Do you want to comment on this post ? {Y/N} : ";
+	        choice = getch();
+	        
+	        if (choice == 'Y' || choice == 'y')
+	        {
+	        	Post* ptr = &temp;
+				string s1, s2;
+	        	s1 = getName() + "\n   ";
+	        	cout << "Enter comment : ";
+	        	getline (cin, s2);
+	        	s1 += s2 + "\n";
+	        	
+	        	ptr->addCommentsToPost(s1);
+			}
+	    }
+	    
+	    if (!ok)
+	    {
+	        cout << "No posts by this user yet..." << endl;
+	    }
+	}
+	
+	// ----------------------------------------------------------adding post
+	void BasicInfo::addPost()
+	{
+		string post_text;
+		cout << "Enter post text : ";
+		getline (cin, post_text);
+		
+		Post temp (post_text, getName());
+		
+		PostsHistory.push_back(temp);
+	}
+	
+	// ----------------------------------------------------------deleting post
+	void BasicInfo::deletePost()
+	{
+		bool ok = false;
+		vector <Post>::iterator itr;
+		int i = 1;
+		
+		if(ok)
+		{
+			for (itr = PostsHistory.begin(); itr != PostsHistory.end(); itr++)
+		    {
+		    	Post temp = *itr;
+		        cout << "---Post-" << i++ << "---" << endl;
+				temp.getPostText();
+				cout << endl << endl;
+		    }
+		    cout << "\n\nEnter number of post to delete : ";
+		    int x;
+		    cin >> x;
+		    itr = PostsHistory.begin() + (x - 1);
+		    PostsHistory.erase(itr);
+		}
+	    
+	    if (!ok)
+	    {
+	        cout << "No friends have been added yet" << endl;
+	    }
+	}
+	
+	
+	class User : public BasicInfo
+	{
+		protected:
+			vector <User> u;			// for friendlist
+			vector <Message> sent_msg;
+			vector <Message> recv_msg;
+		
+		public:
+			// constructor
+			User () {}
+			
+			// functions
+			void addFriend (User&);
+			void removeFriend ();
+			void showFriends ();
+			void sendMessage();
+			void showMessageHistory();			
+	};
+	
+	// ----------------------------------------------------------adding friend
+	void User::addFriend (User& user_obj)
+	{
+		u.push_back(user_obj);
+		cout << "User : " << user_obj.getName() << " has been added to the friendlist\n";
+	}
+	
+	// ----------------------------------------------------------removing friend
+	void User::removeFriend ()
+	{
+		bool ok = false;
+		vector <User>::iterator itr;
+		int i = 1;
+		
+		if(ok)
+		{
+			for (itr = u.begin(); itr != u.end(); itr++)
+		    {
+		    	User temp = *itr;
+		        cout << "Friend-" << i++ << " : " << temp.getName();
+				cout << endl;
+		    }
+		    cout << "\n\nEnter number of friend to delete : ";
+		    int x;
+		    cin >> x;
+		    itr = u.begin() + (x - 1);
+		    u.erase(itr);
+		}
+	    
+	    if (!ok)
+	    {
+	        cout << "No friends have been added yet..." << endl;
+	    }
+	}
+	
+	// ----------------------------------------------------------showing friends
+	void User::showFriends ()
+	{
+		bool ok = false;
+		vector <User>::iterator itr;
+		int i = 1;
+		
+		if(ok)
+		{
+			for (itr = u.begin(); itr != u.end(); itr++)
+		    {
+		    	User temp = *itr;
+		        cout << "Friend-" << i++ << " : " << temp.getName();
+				cout << endl;
+		    }
+		}
+	    
+	    if (!ok)
+	    {
+	        cout << "No friends have been added yet..." << endl;
+	    }
+	}
+	
+	// ----------------------------------------------------------send message
+	void User::sendMessage ()
+	{
+		bool ok = false;
+		vector <User>::iterator itr;
+		int i = 1;
+		
+		if(ok)
+		{
+			for (itr = u.begin(); itr != u.end(); itr++)
+		    {
+		    	User temp = *itr;
+		        cout << "Friend-" << i++ << " : " << temp.getName();
+				cout << endl;
+		    }
+		}
+	    
+	    if (!ok)
+	    {
+	        cout << "No friends have been added yet..." << endl;
+	    }
+	    
+	    int x;
+	    cout << "Choose friend number to message : ";
+	    cin >> x;
+	    
+	    User temp = u[x-1];
+	    User* ptr = &temp;
+	    string msg;
+	    
+	    cout << "Enter your message : ";
+	    getline (cin, msg);
+	    
+	    Message m;
+	    
+	    // for sender
+	    m.setMsgText(msg);
+	    m.setMsgSender(getName());
+	    m.setMsgReceiver(temp.getName());
+	    sent_msg.push_back(m);
+	    
+	    // for receiver
+	    ptr->recv_msg.push_back(m);
+	}
+	
+	
+
+	// ----------------------------------------------------------show message history
+	void User::showMessageHistory ()
+	{
+		char choice;
+		
+		do
+		{
+			cout << "A. View sent messages " << endl;
+			cout << "B. View received messages " << endl << endl;
+			cout << "Choice : ";
+			choice = getch();
+		}
+		while (choice != 'A' && choice != 'a' && choice != 'B' && choice != 'b');
+		
+		if (choice == 'A' || choice == 'a')
+		{
+			bool ok = false;
+			vector <Message>::iterator itr;
+			int i = 1;
+			
+			if(ok)
+			{
+				for (itr = sent_msg.begin(); itr != sent_msg.end(); itr++)
+			    {
+			    	Message temp = *itr;
+			        cout << "Sent to  : " << temp.getMsgReceiver() << endl;
+			        cout << "Msg Body : " << temp.getMsgText() << endl << endl;
+			    }
+			}
+		    
+		    if (!ok)
+		    {
+		        cout << "No messages have been sent yet..." << endl;
+		    }
+		}
+		
+		else if (choice == 'B' || choice == 'b')
+		{
+			bool ok = false;
+			vector <Message>::iterator itr;
+			int i = 1;
+			
+			if(ok)
+			{
+				for (itr = recv_msg.begin(); itr != recv_msg.end(); itr++)
+			    {
+			    	Message temp = *itr;
+			        cout << "Received from  : " << temp.getMsgSender() << endl;
+			        cout << "Msg Body : " << temp.getMsgText() << endl << endl;
+			    }
+			}
+		    
+		    if (!ok)
+		    {
+		        cout << "No messages in inbox..." << endl;
+		    }
+		}
+	}
+	
+	
+	
+	class Admin : public BasicInfo
+	{
+		public:
+			Page* pg;
+			
+			// constructor
+			Admin () 
+			{	pg = new Page; }
+			
+			// functions
+			void createPage ();
+			void updatePageInfo ();
+			void addPostPage();
+			void deletePostPage();
+	};
+	
+	// ----------------------------------------------------------creating new page
+	void Admin::createPage()
+	{
+		pg->setPageAdminName(getName() );
+		pg->setPageAdminPassword(getPassword() );
+		cout << "Enter Page Name : ";
+		cin >> pg->pageName;
+		cout << "Enter Page Description : ";
+		cin >> pg->pageDescription;
+	}
+	
+	void Admin::updatePageInfo()
+	// ----------------------------------------------------------updating user info
+	{
+		char choice;
+		
+		do
+		{
+			system("cls");
+			cout << "-----Updating Page Info-----" 	<< endl << endl;
+			cout << "Choose details to update " 	<< endl << endl;
+			
+			cout << "A. Page Name " 			<< endl;
+			cout << "B. Page Info " 		<< endl;
+			cout << "Z. Go back to main menu" 		<< endl << endl;
+			
+			cout << "Choice : ";
+			
+			choice = getche();
+		}
+		while (choice != 'A' && choice != 'a' && choice != 'B' && choice != 'b' && choice != 'Z' && choice != 'z');
+		
+		// updating page name
+		if (choice == 'A' || choice == 'a')
+		{
+			cout << "   Enter updated Page Name : ";
+			cin >> pg->pageName;
+		}
+		
+		// updating page description
+		else if (choice == 'B' || choice == 'b')
+		{
+			cout << "   Enter updated Page Description : ";
+			cin >> pg->pageDescription;
+		}
+		
+		cout << endl << "Page Info updated successfully! " << endl;
+		cout << "Press any key to go back to main menu...";
+		getch();
+	}
+	
+	// ----------------------------------------------------------adding post to page
+	void Admin::addPostPage ()
+	{
+		string post_text;
+		cout << "Enter post text : ";
+		getline (cin, post_text);
+		
+		Post temp (post_text, getName());
+		pg->addPostToPage(temp);
+	}
+	
+	// ----------------------------------------------------------adding post to page
+	void Admin::deletePostPage ()
+	{
+		pg->deletePostFromPage();
+	}
+	
+	
+	class SuperUser : public User, public Admin
+	{
+		
+	};
+	
+	class FaceBook  {
+	public:
+		void Run() {
+				char choice;
+    
+	    vector <User> user_v;
+	    vector <Admin> admin_v;
+	    vector <SuperUser> super_user_v;
+	    
+	    // ifstream objects for filing
+	    ifstream fR_user; 
+		ifstream fR_admin; 
+		ifstream fR_super_user;
+	    
+	    // ofstream objects for filing
+		ofstream fW_user;
+		ofstream fW_admin;
+		ofstream fW_super_user;
+		
+		// reading already created objects of these classes
+    
+	    // User File
+	    fR_user.open ("Users.bin", ios_base::in | ios_base::binary);
+	    if (fR_user.is_open())
+	    {
+	    	while (!fR_user.eof())
+	    	{
+	    		User temp;
+	    		fR_user.read( (char*)&temp, sizeof(temp) );
+	    		user_v.push_back(temp);
+			}
+		}
+		fR_user.close();
+		
+		// Admin File
+	    fR_user.open ("Admin.bin", ios_base::in | ios_base::binary);
+	    if (fR_admin.is_open())
+	    {
+	    	while (!fR_admin.eof())
+	    	{
+	    		Admin temp;
+	    		fR_admin.read( (char*)&temp, sizeof(temp) );
+	    		admin_v.push_back(temp);
+			}
+		}
+		fR_admin.close();
+		
+		// SuperUser File
+	    fR_super_user.open ("SuperUsers.bin", ios_base::in | ios_base::binary);
+	    if (fR_super_user.is_open())
+	    {
+	    	while (!fR_super_user.eof())
+	    	{
+	    		SuperUser temp;
+	    		fR_super_user.read( (char*)&temp, sizeof(temp) );
+	    		super_user_v.push_back(temp);
+			}
+		}
+		fR_super_user.close();
+		
+		do
+	    {
+	    	// Main Menu for Program
+	    	do
+			{
+				fflush stdin;
+				system("cls");
+				cout << "----------------Main Menu----------------" << endl << endl;
+				cout << "-----Choose user type to interact as-----" << endl;
+				cout << "A. User " << endl;
+				cout << "B. Admin " << endl;
+				cout << "C. SuperUser " << endl;
+				cout << "X. Exit Program " << endl <<endl;
+				
+				cout << "Choice : ";
+				choice = getche();
+				if (choice != 'A' && choice != 'a' && choice != 'B' && choice != 'b' && choice != 'C' && choice != 'c' && choice != 'X' && choice != 'x')
+				{
+					cout << choice << endl << "Choose correct option! Enter any key to return to menu..." << endl;
+					getch ();
+				}
+			}
+			while (choice != 'A' && choice != 'a' && choice != 'B' && choice != 'b' && choice != 'C' && choice != 'c' && choice != 'X' && choice != 'x');
+			
+			
+			// Interacting as User 
+			if (choice == 'A' || choice == 'a')
+			{
+				// further menu for User
+				do
+				{
+					fflush stdin;
+					system("cls");
+					cout << "----------------User Menu----------------" << endl << endl;
+					cout << "A. Create New Account " << endl;
+					cout << "B. Login to Existing Account " << endl;
+					cout << "Z. Go back to Main Menu " << endl << endl;
+					
+					cout << "Choice : ";
+					choice = getche();
+					if (choice != 'A' && choice != 'a' && choice != 'B' && choice != 'b' && choice != 'Z' && choice != 'z')
+					{
+						cout << choice << endl << "Choose correct option! Enter any key to return to menu..." << endl;
+						getch ();
+					}
+				}
+				while (choice != 'A' && choice != 'a' && choice != 'B' && choice != 'b' && choice != 'Z' && choice != 'z');
+			}
+			
+				// User --- create new account
+				if (choice == 'A' || choice == 'a')
+				{
+					User temp; string type = "user";
+					temp.createUser(type);
+					user_v.push_back(temp);
+					
+					// writing updated vector to file
+					fW_user.open("File - Users.bin", ios_base::app | ios_base::binary);
+					
+					vector<User>::iterator Iter;
+					for ( Iter = user_v.begin(); Iter != user_v.end(); Iter++ )
+					{
+						fW_user.write( (char*)&(*Iter), sizeof(User) );
+					}
+					
+					cout << endl << "User created successfully!";
+				}
+				
+				// User --- login to existing account
+				if (choice == 'B' || choice == 'b')
+				{
+				}
+			
+			
+			// writing updated vectors to file
+			fW_user.open("File - Users.bin", ios_base::app | ios_base::binary);
+			
+			vector<User>::iterator Iter;
+			for ( Iter = user_v.begin(); Iter != user_v.end(); Iter++ )
+			{
+				fW_user.write( (char*)&(*Iter), sizeof(User) );
+			}
+			fW_user.close();
+
+			// writing updated vectors to file
+			fW_admin.open("File - Users.bin", ios_base::app | ios_base::binary);
+			
+			vector<Admin>::iterator Iter1;
+			for ( Iter1 = admin_v.begin(); Iter1 != admin_v.end(); Iter1++ )
+			{
+				fW_admin.write( (char*)&(*Iter1), sizeof(Admin) );
+			}
+
+			// writing updated vectors to file
+			fW_super_user.open("File - Users.bin", ios_base::app | ios_base::binary);
+			
+			vector<SuperUser>::iterator Iter2;
+			for ( Iter2 = super_user_v.begin(); Iter2 != super_user_v.end(); Iter2++ )
+			{
+				fW_super_user.write( (char*)&(*Iter2), sizeof(SuperUser) );
+			}
+			
+			cout << endl << "User created successfully!";
+		}
+		while (choice != 'X' && choice != 'x');
+	
+		}	
+
+	};
+
+
+	int main () {
+		FaceBook FB;
+		FB.Run();
+	}
